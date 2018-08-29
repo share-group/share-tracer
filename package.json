@@ -1,0 +1,27 @@
+{
+  "name": "share-tracer",
+  "version": "0.0.7",
+  "scripts": {
+    "tslint": "tslint -c tslint.json 'src/**/*.ts' --fix",
+    "build": "npm run tslint && rimraf dist && tsc -p ./",
+    "prepublishOnly": "npm run build"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.10",
+    "mongodb": "^3.1.4",
+    "pandora-hook": "^1.8.27",
+    "pandora-hub": "^1.8.15",
+    "pandora-metrics": "^1.8.26"
+  },
+  "devDependencies": {
+    "@types/node": "^10.9.3",
+    "rimraf": "^2.6.2",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.1"
+  }
+}

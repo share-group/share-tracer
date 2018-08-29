@@ -1,0 +1,73 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "rules": {
+    "semicolon": [
+      true,
+      "never"
+    ],
+    "eofline": false,
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "no-duplicate-imports": false,
+    "ban-types": false,
+    "only-arrow-functions": false,
+    "radix": false,
+    "indent": false,
+    "member-access": [
+      false
+    ],
+    "ordered-imports": [
+      false
+    ],
+    "max-line-length": [
+      false
+    ],
+    "no-console": [
+      true
+    ],
+    "member-ordering": [
+      false
+    ],
+    "no-shadowed-variable": [
+      false
+    ],
+    "curly": false,
+    "interface-name": [
+      false
+    ],
+    "array-type": [
+      false
+    ],
+    "no-empty-interface": true,
+    "no-empty": true,
+    "no-return-await": false,
+    "arrow-parens": false,
+    "object-literal-sort-keys": false,
+    "no-unused-expression": false,
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "never",
+        "singleline": "never"
+      }
+    ],
+    "max-classes-per-file": [
+      false
+    ],
+    "variable-name": [
+      false
+    ],
+    "no-var-requires": true,
+    "one-line": [
+      false
+    ],
+    "one-variable-per-declaration": [
+      false
+    ]
+  }
+}
