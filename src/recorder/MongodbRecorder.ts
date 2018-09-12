@@ -34,12 +34,14 @@ export class MongodbRecorder {
   private dbName: string
   private appName: string
   private logger: any
+  private indexes?: any[]
 
-  constructor(url: string, logger: any) {
+  constructor(url: string, logger: any, indexes?: any[]) {
     const self = this
     MongoClient.connect(url, function(err, client) {
       self.logger = logger
       self.client = client
+      self.indexes = indexes
       self.dbName = self._dbName(url)
       self.appName = getAppName()
       if (_.isEmpty(err)) {
@@ -53,7 +55,8 @@ export class MongodbRecorder {
   run(data?: any): void {
     const db = this.client.db(this.dbName)
     const collection = db.collection(this._collectionName())
-    mongodbRecorderModelIndex.forEach(v => collection.createIndex(v, {background: true}))
+    const indexes = mongodbRecorderModelIndex.concat(this.indexes)
+    indexes.forEach(v => collection.createIndex(v, {background: true}))
     collection.insertMany(this._parse(data))
   }
 

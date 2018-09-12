@@ -16,6 +16,9 @@ export interface ShareTracerOptions {
     enable?: boolean
     instance?: any
   }
+
+  // 表索引定义
+  indexes?: any[]
 }
 
 export class ShareTracer {
@@ -39,7 +42,12 @@ export class ShareTracer {
   private _useMongodbRecorder() {
     if (!this.options.mongodb.enable) return
     const logger = this.options.logger.instance || defaultLogger
-    const mongodbRecorder = new MongodbRecorder(this.options.mongodb.url, logger)
+    const indexes = this.options.indexes || []
+    const mongodbRecorder = new MongodbRecorder(
+      this.options.mongodb.url,
+      logger,
+      indexes
+    )
     process.on('PANDORA_PROCESS_MESSAGE_TRACE' as any, (tracer: any) => {
       mongodbRecorder.run(_.cloneDeep(tracer))
     })
