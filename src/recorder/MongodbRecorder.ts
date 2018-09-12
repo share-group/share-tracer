@@ -92,7 +92,7 @@ export class MongodbRecorder {
         query: query ? safeParse(query.fields[0].value) : undefined,
         body: body ? safeParse(body.fields[0].value) : undefined,
         response: response ? safeParse(response.fields[0].value) : undefined,
-        status: parseInt(span.tags['http.status_code'].value),
+        status: span.tags['http.status_code'] ? parseInt(span.tags['http.status_code'].value) : undefined,
         requestTime: parseInt(span.timestamp),
         duration: parseInt(span.duration)
       }, _.identity))

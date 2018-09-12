@@ -46,13 +46,58 @@ export class ShareHttpClientShimmer extends HttpClientShimmer {
       }
 
       const _request = request.apply(this, args)
-
       self.buildTagsAndLog(args, _request, span)
 
       self.wrapRequest(_request, tracer, span)
 
       return _request
     }
+  }
+
+  handleResponse(tracer, span, res) {
+    const traceManager = this.traceManager
+    const shimmer = this.shimmer
+    const self = this
+    const recordResponse = this.options.recordResponse
+    const bufferTransformer = this.options.bufferTransformer || self.bufferTransformer
+
+    res.__responseSize = 0
+    res.__chunks = []
+
+    shimmer.wrap(res, 'emit', function wrapResponseEmit(emit) {
+      const bindResponseEmit = traceManager.bind(emit)
+
+      return function wrappedResponseEmit(this: ClientRequest, event) {
+        if (event === 'end') {
+          if (span) {
+
+            if (recordResponse) {
+              const response = bufferTransformer(Buffer.concat(res.__chunks.map(v => Buffer.from(v))), res)
+              span.log({
+                response
+              })
+            }
+
+            span.error(false)
+
+            self._responseEnd(res, span)
+
+            tracer.setCurrentSpan(span)
+            span.finish()
+            self._finish(res, span)
+          }
+        } else if (event === 'data') {
+          const chunk = arguments[1] || []
+          res.__responseSize += chunk.length
+
+          if (recordResponse) {
+            res.__chunks.push(chunk)
+          }
+        }
+
+        return bindResponseEmit.apply(this, arguments)
+      }
+    })
   }
 
   wrapRequest = (request, tracer, span) => {
