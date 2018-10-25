@@ -19,9 +19,9 @@ export class LoggerRecorder {
     const [_body] = _.remove(span.logs, v => v.fields[0].key === 'data') || [{}]
     const [_response] = _.remove(span.logs, v => v.fields[0].key === 'response') || [{}]
 
-    const query = _query ? safeParse(_query.fields[0].value) : undefined
-    const body = _body ? safeParse(_body.fields[0].value) : undefined
-    const response = _response ? safeParse(_response.fields[0].value) : undefined
+    const query = _query ? safeParse(_query.fields[0].value) : {}
+    const body = _body ? safeParse(_body.fields[0].value) : {}
+    const response = _response ? safeParse(_response.fields[0].value) : {}
 
     this.logger.trace(`request url: ${url}`)
     this.logger.trace(`request method: ${method}`)
