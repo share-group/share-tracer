@@ -10,9 +10,9 @@ export class LoggerRecorder {
 
   run(data?: any): void {
     const span = _.find(data.spans, v => v.name === 'http')
-    const method = span.tags['http.method'].value.toUpperCase().trim()
-    const url = span.tags['http.url'].value.trim()
-    const status = parseInt(span.tags['http.status_code'].value)
+    const method = span.tags['http.method'] ? span.tags['http.method'].value.toUpperCase().trim() : 'unknow'
+    const url = span.tags['http.url'] ? span.tags['http.url'].value.trim() : ''
+    const status = span.tags['http.status_code'] ? parseInt(span.tags['http.status_code'].value) : 0
     const duration = parseInt(span.duration)
 
     const [_query] = _.remove(span.logs, v => v.fields[0].key === 'query') || [{}]
