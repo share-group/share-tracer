@@ -1,4 +1,5 @@
 import * as fs from 'fs'
+import * as _ from 'lodash'
 import * as parse from 'parseurl'
 import * as path from 'path'
 import * as qs from 'querystring'
@@ -48,7 +49,7 @@ function querystring(req) {
 
 export function query(req) {
   const str = querystring(req)
-  const c = this._querycache || {}
+  const c = _.get(global, '_querycache', {})
   return c[str] || (c[str] = qs.parse(str))
 }
 

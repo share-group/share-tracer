@@ -75,10 +75,6 @@
       true,
       "array"
     ],
-    "no-invalid-this": [
-      true,
-      "check-function-in-method"
-    ],
     "unnecessary-else": true,
     "no-empty-interface": true,
     "no-empty": true,
