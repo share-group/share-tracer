@@ -64,13 +64,11 @@ export class ShareHttpClientShimmer extends HttpClientShimmer {
     res.__responseSize = 0
     res.__chunks = []
 
-    shimmer.wrap(res, 'emit', emit => {
+    shimmer.wrap(res, 'emit', (emit) => {
       const bindResponseEmit = traceManager.bind(emit)
-
       return function wrappedResponseEmit(this: ClientRequest, event) {
         if (event === 'end') {
           if (span) {
-
             if (recordResponse) {
               const response = bufferTransformer(Buffer.concat(res.__chunks.map(v => Buffer.from(v))), res)
               span.log({
@@ -79,9 +77,7 @@ export class ShareHttpClientShimmer extends HttpClientShimmer {
             }
 
             span.error(false)
-
             self._responseEnd(res, span)
-
             tracer.setCurrentSpan(span)
             span.finish()
             self._finish(res, span)
@@ -89,7 +85,6 @@ export class ShareHttpClientShimmer extends HttpClientShimmer {
         } else if (event === 'data') {
           const chunk = arguments[1] || []
           res.__responseSize += chunk.length
-
           if (recordResponse) {
             res.__chunks.push(chunk)
           }
@@ -117,9 +112,8 @@ export class ShareHttpClientShimmer extends HttpClientShimmer {
      * 如果指定了 data，则相当于调用 request.write(data, encoding) 之后再调用 request.end(callback)。
      * 见：http://nodejs.cn/api/http.html#http_request_end_data_encoding_callback
      */
-    shimmer.wrap(request, 'end', write => {
+    shimmer.wrap(request, 'end', (write) => {
       const bindRequestWrite = traceManager.bind(write)
-
       return function wrappedRequestWrite(this: ClientRequest, data, encoding) {
         if (dataTypeFilter(data, encoding)) {
           handleBody(span, data)

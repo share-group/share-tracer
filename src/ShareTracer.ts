@@ -4,7 +4,7 @@ import {EnvironmentUtil} from 'pandora-env'
 import {getAppName, DefaultEnvironment, HttpClientPatcher, HttpServerPatcher, Logger as defaultLogger} from './lib'
 import {LoggerRecorder, MongodbRecorder} from './recorder'
 
-export interface ShareTracerOptions {
+export interface IShareTracerOptions {
   // mongodb记录
   mongodb?: {
     enable?: boolean
@@ -22,9 +22,9 @@ export interface ShareTracerOptions {
 }
 
 export class ShareTracer {
-  private options: ShareTracerOptions
+  private options: IShareTracerOptions
 
-  constructor(options?: ShareTracerOptions) {
+  constructor(options?: IShareTracerOptions) {
     if (options.mongodb.enable) assert(options.mongodb.url, '"mongodb.url" must given')
     this.options = options
     EnvironmentUtil.getInstance().setCurrentEnvironment(new DefaultEnvironment())
