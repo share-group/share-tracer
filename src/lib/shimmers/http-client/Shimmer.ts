@@ -1,7 +1,7 @@
-import {HttpClientShimmer} from 'pandora-hook'
 import {ClientRequest} from 'http'
-import {safeParse, query, getOriginUrl} from '../../Utils'
+import {HttpClientShimmer} from 'pandora-hook'
 import {parse as parseQS} from 'querystring'
+import {getOriginUrl, query, safeParse} from '../../Utils'
 
 export class ShareHttpClientShimmer extends HttpClientShimmer {
   buildTags(args, request) {
@@ -64,7 +64,7 @@ export class ShareHttpClientShimmer extends HttpClientShimmer {
     res.__responseSize = 0
     res.__chunks = []
 
-    shimmer.wrap(res, 'emit', function wrapResponseEmit(emit) {
+    shimmer.wrap(res, 'emit', emit => {
       const bindResponseEmit = traceManager.bind(emit)
 
       return function wrappedResponseEmit(this: ClientRequest, event) {
@@ -117,7 +117,7 @@ export class ShareHttpClientShimmer extends HttpClientShimmer {
      * 如果指定了 data，则相当于调用 request.write(data, encoding) 之后再调用 request.end(callback)。
      * 见：http://nodejs.cn/api/http.html#http_request_end_data_encoding_callback
      */
-    shimmer.wrap(request, 'end', function requestWriteWrapper(write) {
+    shimmer.wrap(request, 'end', write => {
       const bindRequestWrite = traceManager.bind(write)
 
       return function wrappedRequestWrite(this: ClientRequest, data, encoding) {
@@ -129,7 +129,7 @@ export class ShareHttpClientShimmer extends HttpClientShimmer {
     })
 
     function dataTypeFilter(chunk, encoding) {
-      const hasChunk = chunk && typeof(chunk) === 'string'
+      const hasChunk = chunk && typeof (chunk) === 'string'
       const isUtf8 = encoding === undefined || encoding === 'utf8' // default is utf8
       return (hasChunk && isUtf8)
     }

@@ -1,16 +1,27 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2017",
-    "moduleResolution": "node",
+    "declaration": false,
+    "noImplicitAny": false,
+    "noLib": false,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true,
-    "outDir": "dist"
+    "target": "es2018",
+    "sourceMap": false,
+    "allowJs": false,
+    "removeComments": true,
+    "outDir": "./dist",
+    "baseUrl": "./src"
   },
   "include": [
-    "src/**/*"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules"
+  ],
+  "types": [
+    "node",
+    "mocha"
   ]
 }

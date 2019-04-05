@@ -1,5 +1,5 @@
-import {HttpServerPatcher as Base} from 'pandora-hook'
 import {IncomingMessage} from 'http'
+import {HttpServerPatcher as Base} from 'pandora-hook'
 import {ParsedUrlQuery} from 'querystring'
 import {safeParse} from './Utils'
 
@@ -180,7 +180,7 @@ export class HttpServerPatcher extends Base {
       return function wrappedCreateServer(this: any, requestListener) {
         if (requestListener) {
 
-          const listener = traceManager.bind(function(req, res) {
+          const listener = traceManager.bind(function (req, res) {
             const requestFilter = options.requestFilter || self.requestFilter
 
             if (requestFilter(req)) {

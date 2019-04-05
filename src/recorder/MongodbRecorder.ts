@@ -1,9 +1,9 @@
-import * as os from 'os'
 import * as _ from 'lodash'
 import {MongoClient} from 'mongodb'
-import {getAppName, timeFormat, safeParse} from '../lib'
+import * as os from 'os'
+import {getAppName, safeParse, timeFormat} from '../lib'
 
-export interface MongodbRecorderModel {
+export interface IMongodbRecorderModel {
   application: string
   machine: string
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTIONS' | 'HEAD'
@@ -38,7 +38,7 @@ export class MongodbRecorder {
 
   constructor(url: string, logger: any, indexes?: any[]) {
     const self = this
-    MongoClient.connect(url, function(err, client) {
+    MongoClient.connect(url, (err, client) => {
       self.logger = logger
       self.client = client
       self.indexes = indexes
@@ -75,8 +75,8 @@ export class MongodbRecorder {
     return `Log_${timeFormat('yyyyMM')}`
   }
 
-  private _parse(data?: any): Array<MongodbRecorderModel> {
-    const list = [] as Array<MongodbRecorderModel>
+  private _parse(data?: any): IMongodbRecorderModel[] {
+    const list = [] as IMongodbRecorderModel[]
     for (const span of data.spans) {
       const [originUrl] = _.remove(span.logs, v => v.fields[0].key === 'originUrl')
       const [query] = _.remove(span.logs, v => v.fields[0].key === 'query') || [{}]

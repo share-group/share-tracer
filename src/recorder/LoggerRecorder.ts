@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import {Logger as defaultLogger, safeParse} from '../lib'
+import {safeParse, Logger as defaultLogger} from '../lib'
 
 export class LoggerRecorder {
   private logger?: any

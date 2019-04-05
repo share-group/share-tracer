@@ -1,7 +1,8 @@
 {
   "defaultSeverity": "error",
   "extends": [
-    "tslint:recommended"
+    "tslint:recommended",
+    "tslint-config-airbnb"
   ],
   "rules": {
     "semicolon": [
@@ -13,42 +14,82 @@
       true,
       "single"
     ],
+    "function-name": false,
+    "object-shorthand-properties-first": false,
+    "no-parameter-reassignment": false,
+    "object-curly-spacing": [
+      true,
+      "never",
+      {
+        "arraysInObjects": false,
+        "objectsInObjects": false
+      }
+    ],
     "no-duplicate-imports": false,
     "ban-types": false,
+    "align": false,
+    "whitespace": false,
+    "import-name": false,
     "only-arrow-functions": false,
+    "no-this-assignment": false,
     "radix": false,
-    "indent": false,
+    "prefer-for-of": false,
     "member-access": [
-      false
+      true,
+      "no-public"
     ],
     "ordered-imports": [
-      false
+      true,
+      {
+        "import-sources-order": "lowercase-first",
+        "named-imports-order": "lowercase-first"
+      }
     ],
-    "max-line-length": [
-      false
+    "linebreak-style": [
+      true,
+      "LF"
     ],
+    "brace-style": [
+      true,
+      "1tbs",
+      {
+        "allowSingleLine": false
+      }
+    ],
+    "max-line-length": false,
     "no-console": [
       true
     ],
     "member-ordering": [
       false
     ],
-    "no-shadowed-variable": [
-      false
+    "curly": [
+      true,
+      "ignore-same-line"
     ],
-    "curly": false,
     "interface-name": [
-      false
+      true,
+      "always-prefix"
     ],
     "array-type": [
-      false
+      true,
+      "array"
     ],
+    "no-invalid-this": [
+      true,
+      "check-function-in-method"
+    ],
+    "unnecessary-else": true,
     "no-empty-interface": true,
     "no-empty": true,
-    "no-return-await": false,
+    "no-arg": true,
+    "no-require-imports": true,
+    "no-return-await": true,
     "arrow-parens": false,
+    "arrow-return-shorthand": true,
     "object-literal-sort-keys": false,
-    "no-unused-expression": false,
+    "no-unused-expression": true,
+    "encoding": true,
     "trailing-comma": [
       true,
       {
@@ -56,18 +97,17 @@
         "singleline": "never"
       }
     ],
-    "max-classes-per-file": [
-      false
-    ],
-    "variable-name": [
-      false
-    ],
+    "class-name": true,
+    "no-string-throw": true,
+    "no-sparse-arrays": true,
+    "no-string-literal": true,
+    "no-boolean-literal-compare": false,
+    "no-shadowed-variable": false,
+    "max-classes-per-file": false,
+    "variable-name": false,
     "no-var-requires": true,
-    "one-line": [
-      false
-    ],
-    "one-variable-per-declaration": [
-      false
-    ]
+    "one-line": false,
+    "triple-equals": true,
+    "one-variable-per-declaration": false
   }
 }
