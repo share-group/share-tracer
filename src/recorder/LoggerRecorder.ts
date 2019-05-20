@@ -1,16 +1,5 @@
-import * as config from 'config'
 import * as _ from 'lodash'
-import {safeParse, Logger as defaultLogger} from '../lib'
-
-const values = {
-  ALL: Number.MIN_SAFE_INTEGER,
-  TRACE: 10000,
-  DEBUG: 20000,
-  INFO: 30000,
-  WARN: 40000,
-  ERROR: 50000,
-  FATAL: Number.MAX_SAFE_INTEGER
-}
+import {Logger as defaultLogger, safeParse} from '../lib'
 
 export class LoggerRecorder {
   private logger?: any
