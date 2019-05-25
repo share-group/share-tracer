@@ -5,7 +5,7 @@ import * as path from 'path'
 import * as qs from 'querystring'
 
 export function getAppPath() {
-  return path.resolve(`${process.mainModule.paths[1]}${path.sep}..`).trim()
+  return path.resolve(`${__dirname}${path.sep}..${path.sep}..${path.sep}..${path.sep}..`).trim()
 }
 
 export function getAppName() {
