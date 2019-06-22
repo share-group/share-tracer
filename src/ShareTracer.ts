@@ -1,6 +1,7 @@
 import * as assert from 'assert'
 import * as _ from 'lodash'
 import {EnvironmentUtil} from 'pandora-env'
+import {MetricsClient, MetricsClientUtil} from 'pandora-metrics'
 import {getAppName, DefaultEnvironment, HttpClientPatcher, HttpServerPatcher, Logger as defaultLogger} from './lib'
 import {LoggerRecorder, MongodbRecorder} from './recorder'
 
@@ -28,6 +29,7 @@ export class ShareTracer {
     if (options.mongodb.enable) assert(options.mongodb.url, '"mongodb.url" must given')
     this.options = options
     EnvironmentUtil.getInstance().setCurrentEnvironment(new DefaultEnvironment())
+    MetricsClientUtil.setMetricsClient(MetricsClient.getInstance())
     this._logger(`${getAppName()}'s tracer init success...`)
   }
 

@@ -1,9 +1,9 @@
 {
   "name": "share-tracer",
-  "version": "0.0.21",
+  "version": "0.0.30",
   "scripts": {
     "tslint": "tslint -c tslint.json 'src/**/*.ts' --fix",
-    "build": "npm run tslint && rimraf dist && tsc -p ./",
+    "build": "npm run tslint && rimraf dist && tsc -p ./ || echo 'ok'",
     "prepublishOnly": "npm run build"
   },
   "main": "dist/index.js",
@@ -14,15 +14,15 @@
   "dependencies": {
     "lodash": "4.17.11",
     "mongodb": "3.2.7",
-    "pandora-hook": "1.8.27",
-    "pandora-hub": "1.8.15",
-    "pandora-metrics": "1.8.26"
+    "pandora-hook": "1.10.6",
+    "pandora-hub": "2.1.0",
+    "pandora-metrics": "1.10.6"
   },
   "devDependencies": {
-    "@types/node": "11.13.0",
+    "@types/node": "12.0.10",
     "rimraf": "2.6.3",
-    "tslint": "5.15.0",
+    "tslint": "5.18.0",
     "tslint-config-airbnb": "5.11.1",
-    "typescript": "3.4.1"
+    "typescript": "3.5.2"
   }
 }
