@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "lodash": "4.17.11",
-    "mongodb": "3.2.5",
+    "mongodb": "3.2.7",
     "pandora-hook": "1.8.27",
     "pandora-hub": "1.8.15",
     "pandora-metrics": "1.8.26"

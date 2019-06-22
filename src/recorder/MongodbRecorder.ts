@@ -38,7 +38,7 @@ export class MongodbRecorder {
 
   constructor(url: string, logger: any, indexes?: any[]) {
     const self = this
-    MongoClient.connect(url, (err, client) => {
+    MongoClient.connect(url, {useNewUrlParser: true}, (err, client) => {
       self.logger = logger
       self.client = client
       self.indexes = indexes
