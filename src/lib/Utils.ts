@@ -1,10 +1,11 @@
 import * as fs from 'fs'
+import * as _ from 'lodash'
+import * as parse from 'parseurl'
 import * as path from 'path'
 import * as qs from 'querystring'
-import * as parse from 'parseurl'
 
 export function getAppPath() {
-  return path.resolve(`${process.mainModule.paths[1]}${path.sep}..`).trim()
+  return path.resolve(`${__dirname}${path.sep}..${path.sep}..${path.sep}..${path.sep}..`).trim()
 }
 
 export function getAppName() {
@@ -31,7 +32,7 @@ export function timeFormat(_format = 'yyyy-MM-dd hh:mm:ss' as string) {
     'm+': date.getMinutes(), // 分
     's+': date.getSeconds(), // 秒
     'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
-    'S': date.getMilliseconds() // 毫秒
+    S: date.getMilliseconds() // 毫秒
   }
   format = /(y+)/.test(format) ? format.replace(RegExp.$1, (`${date.getFullYear()}`).substr(4 - RegExp.$1.length)) : format
   Object.keys(o).filter((k) => {
@@ -48,7 +49,7 @@ function querystring(req) {
 
 export function query(req) {
   const str = querystring(req)
-  const c = this._querycache || {}
+  const c = _.get(global, '_querycache', {})
   return c[str] || (c[str] = qs.parse(str))
 }
 

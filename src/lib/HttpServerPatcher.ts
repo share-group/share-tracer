@@ -1,5 +1,5 @@
-import {HttpServerPatcher as Base} from 'pandora-hook'
 import {IncomingMessage} from 'http'
+import {HttpServerPatcher as Base} from 'pandora-hook'
 import {ParsedUrlQuery} from 'querystring'
 import {safeParse} from './Utils'
 
@@ -34,7 +34,7 @@ export class HttpServerPatcher extends Base {
     const shimmer = this.getShimmer()
 
     // 为了记录 res 参数 见 http://nodejs.cn/api/http.html#http_response_end_data_encoding_callback
-    shimmer.wrap(res, 'write', function responseWriteWrapper(write) {
+    shimmer.wrap(res, 'write', (write) => {
       const bindRequestWrite = traceManager.bind(write)
       return function wrappedResponseWrite(chunk, encoding, callback) {
         responseLog(res, chunk, encoding)
@@ -42,7 +42,7 @@ export class HttpServerPatcher extends Base {
       }
     })
 
-    shimmer.wrap(res, 'end', function responseWriteWrapper(write) {
+    shimmer.wrap(res, 'end', (write) => {
       const bindRequestWrite = traceManager.bind(write)
       return function wrappedResponseWrite(chunk, encoding, callback) {
         responseLog(res, chunk, encoding)
@@ -67,7 +67,7 @@ export class HttpServerPatcher extends Base {
     }
 
     function dataTypeFilter(chunk, encoding) {
-      const hasChunk = chunk && typeof(chunk.toString('utf8').trim()) === 'string'
+      const hasChunk = chunk && typeof (chunk.toString('utf8').trim()) === 'string'
       const isUtf8 = encoding === undefined || encoding === 'utf8' // default is utf8
       return (hasChunk && isUtf8)
     }
@@ -109,7 +109,7 @@ export class HttpServerPatcher extends Base {
     const shimmer = this.getShimmer()
     let chunks = []
     if (req.method && req.method.toUpperCase() === 'POST') {
-      shimmer.wrap(req, 'emit', function wrapRequestEmit(emit) {
+      shimmer.wrap(req, 'emit', (emit) => {
         const bindRequestEmit = traceManager.bind(emit)
 
         return function wrappedRequestEmit(this: IncomingMessage, event) {
@@ -175,14 +175,11 @@ export class HttpServerPatcher extends Base {
     const self = this
     const traceManager = this.getTraceManager()
     const shimmer = this.getShimmer()
-    shimmer.wrap(this.getModule(), 'createServer', function wrapCreateServer(createServer) {
-
+    shimmer.wrap(this.getModule(), 'createServer', (createServer) => {
       return function wrappedCreateServer(this: any, requestListener) {
         if (requestListener) {
-
-          const listener = traceManager.bind(function(req, res) {
+          const listener = traceManager.bind((req, res) => {
             const requestFilter = options.requestFilter || self.requestFilter
-
             if (requestFilter(req)) {
               return requestListener(req, res)
             }
@@ -195,12 +192,9 @@ export class HttpServerPatcher extends Base {
             const tags = self.buildTags(req)
             const span = self.createSpan(tracer, tags)
             self.wrapRequest(options, req, res, tracer, span)
-
             span.log({originUrl: self.getFullUrl(req)})
-
             tracer.named(`HTTP-${tags['http.method'].value}:${tags['http.url'].value}`)
             tracer.setCurrentSpan(span)
-
             return requestListener(req, res)
           })
 

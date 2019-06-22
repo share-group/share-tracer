@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import {Logger as defaultLogger, safeParse} from '../lib'
+import {safeParse, Logger as defaultLogger} from '../lib'
 
 export class LoggerRecorder {
   private logger?: any
@@ -23,10 +23,12 @@ export class LoggerRecorder {
     const body = _body ? safeParse(_body.fields[0].value) : {}
     const response = _response ? safeParse(_response.fields[0].value) : {}
 
-    this.logger.trace(`request url: ${url}`)
-    this.logger.trace(`request method: ${method}`)
-    this.logger.trace(`request: ${JSON.stringify(_.pickBy(Object.assign({}, query, body), _.identity))}`)
-    this.logger.trace(`response, size: ${this._circulateSize(JSON.stringify(response).length)}, data: ${JSON.stringify(response)}`)
+    if (process.env.NODE_ENV !== 'production') {
+      this.logger.trace(`request url: ${url}`)
+      this.logger.trace(`request method: ${method}`)
+      this.logger.trace(`request: ${JSON.stringify(_.pickBy(Object.assign({}, query, body), _.identity))}`)
+      this.logger.trace(`response, size: ${this._circulateSize(JSON.stringify(response).length)}, data: ${JSON.stringify(response)}`)
+    }
     this.logger.info(`${status} ${method} ${url} ${duration}ms`)
   }
 
