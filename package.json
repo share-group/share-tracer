@@ -1,6 +1,6 @@
 {
   "name": "share-tracer",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "scripts": {
     "tslint": "tslint -c tslint.json 'src/**/*.ts' --fix",
     "build": "npm run tslint && rimraf dist && tsc -p ./ || echo 'ok'",
