@@ -1,9 +1,10 @@
 import * as _ from 'lodash'
-import {MongoClient} from 'mongodb'
+import {MongoClient, ObjectId} from 'mongodb'
 import * as os from 'os'
 import {getAppName, safeParse, timeFormat} from '../lib'
 
 export interface IMongodbRecorderModel {
+  requestId: string
   application: string
   machine: string
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTIONS' | 'HEAD'
@@ -24,6 +25,7 @@ export interface IMongodbRecorderModel {
 const mongodbRecorderModelIndex = [
   {application: 1},
   {requestTime: 1},
+  {requestId: 1},
   {originUrl: 1},
   {hostname: 1},
   {status: 1}
@@ -75,14 +77,16 @@ export class MongodbRecorder {
     return `Log_${timeFormat('yyyyMM')}`
   }
 
-  private _parse(data?: any): IMongodbRecorderModel[] {
+  private _parse(data?: any): IMongodbRecordrerModel[] {
     const list = [] as IMongodbRecorderModel[]
+    const requestId = ObjectId().toString()
     for (const span of data.spans) {
       const [originUrl] = _.remove(span.logs, v => v.fields[0].key === 'originUrl')
       const [query] = _.remove(span.logs, v => v.fields[0].key === 'query') || [{}]
       const [body] = _.remove(span.logs, v => v.fields[0].key === 'data') || [{}]
       const [response] = _.remove(span.logs, v => v.fields[0].key === 'response') || [{}]
-      list.push(_.pickBy({
+      list.push(this._protected(_.pickBy({
+        requestId,
         application: this.appName,
         machine: os.hostname(),
         method: span.tags['http.method'].value.toUpperCase().trim(),
@@ -98,8 +102,18 @@ export class MongodbRecorder {
         status: span.tags['http.status_code'] ? parseInt(span.tags['http.status_code'].value) : undefined,
         requestTime: parseInt(span.timestamp),
         duration: parseInt(span.duration)
-      }, _.identity))
+      }, _.identity)))
     }
     return list
+  }
+
+  _protected(data: any): any {
+    if (data.query && data.query.password) {
+      Object.assign(data.query, {password: '******'})
+    }
+    if (data.body && data.body.password) {
+      Object.assign(data.body, {password: '******'})
+    }
+    return data
   }
 }

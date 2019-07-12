@@ -26,7 +26,9 @@ export class ShareTracer {
   private options: IShareTracerOptions
 
   constructor(options?: IShareTracerOptions) {
-    if (options.mongodb.enable) assert(options.mongodb.url, '"mongodb.url" must given')
+    if (options.mongodb.enable) {
+      assert(options.mongodb.url, '"mongodb.url" must given')
+    }
     this.options = options
     EnvironmentUtil.getInstance().setCurrentEnvironment(new DefaultEnvironment())
     MetricsClientUtil.setMetricsClient(MetricsClient.getInstance())
@@ -42,7 +44,9 @@ export class ShareTracer {
   }
 
   private _useMongodbRecorder() {
-    if (!this.options.mongodb.enable) return
+    if (!this.options.mongodb.enable) {
+      return
+    }
     const logger = this.options.logger.instance || defaultLogger
     const indexes = this.options.indexes || []
     const mongodbRecorder = new MongodbRecorder(
@@ -56,7 +60,9 @@ export class ShareTracer {
   }
 
   private _useLoggerRecorder() {
-    if (!this.options.logger.enable) return
+    if (!this.options.logger.enable) {
+      return
+    }
     const loggerRecorder = new LoggerRecorder(this.options.logger.instance)
     process.on('PANDORA_PROCESS_MESSAGE_TRACE' as any, (tracer: any) => {
       loggerRecorder.run(_.cloneDeep(tracer))
@@ -64,7 +70,9 @@ export class ShareTracer {
   }
 
   private _logger(...args: any[]) {
-    if (!this.options.logger.enable) return
+    if (!this.options.logger.enable) {
+      return
+    }
     const logger = this.options.logger.instance || defaultLogger
     logger.info(...args)
   }
