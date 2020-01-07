@@ -69,7 +69,7 @@ export class MongodbRecorder {
         self.logger.error(`${getAppName()}'s tracer connect to ${self.url} error:`, err)
       }
 
-      self.client.on('close', function () {
+      self.client.on('close', () => {
         self.logger.warn('mongodb server closed ...')
         self._connect()
       })
