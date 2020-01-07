@@ -33,33 +33,47 @@ const mongodbRecorderModelIndex = [
 
 export class MongodbRecorder {
   private client: MongoClient
+  private url: string
   private dbName: string
   private appName: string
   private logger: any
   private indexes?: any[]
 
   constructor(url: string, logger: any, indexes?: any[]) {
-    const self = this
-    MongoClient.connect(url, {useNewUrlParser: true}, (err, client) => {
-      self.logger = logger
-      self.client = client
-      self.indexes = indexes
-      self.dbName = self._dbName(url)
-      self.appName = getAppName()
-      if (_.isEmpty(err)) {
-        self.logger.info(`${getAppName()}'s tracer connect to ${url} success...`)
-      } else {
-        self.logger.error(`${getAppName()}'s tracer connect to ${url} error:`, err)
-      }
-    })
+    this.url = url
+    this.logger = logger
+    this.indexes = indexes
+    this._connect()
   }
 
   run(data?: any): void {
+    if (!this.client) {
+      this._connect()
+    }
     const db = this.client.db(this.dbName)
     const collection = db.collection(this._collectionName())
     const indexes = mongodbRecorderModelIndex.concat(this.indexes)
     indexes.forEach(v => collection.createIndex(v, {background: true}))
     collection.insertMany(this._parse(data))
+  }
+
+  private _connect(): void {
+    const self = this
+    MongoClient.connect(self.url, {useNewUrlParser: true}, (err, client) => {
+      self.client = client
+      self.dbName = self._dbName(self.url)
+      self.appName = getAppName()
+      if (_.isEmpty(err)) {
+        self.logger.info(`${getAppName()}'s tracer connect to ${self.url} success...`)
+      } else {
+        self.logger.error(`${getAppName()}'s tracer connect to ${self.url} error:`, err)
+      }
+
+      self.client.on('close', () => {
+        self.logger.warn('mongodb server closed ...')
+        self._connect()
+      })
+    })
   }
 
   private _dbName(url: string): string {
