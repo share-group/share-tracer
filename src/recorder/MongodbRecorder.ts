@@ -59,7 +59,7 @@ export class MongodbRecorder {
 
   private _connect(): void {
     const self = this
-    MongoClient.connect(self.url, {useNewUrlParser: true}, (err, client) => {
+    MongoClient.connect(self.url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       self.client = client
       self.dbName = self._dbName(self.url)
       self.appName = getAppName()
@@ -91,7 +91,7 @@ export class MongodbRecorder {
     return `Log_${timeFormat('yyyyMM')}`
   }
 
-  private _parse(data?: any): IMongodbRecordrerModel[] {
+  private _parse(data?: any): IMongodbRecorderModel[] {
     const list = [] as IMongodbRecorderModel[]
     const requestId = ObjectId().toString()
     for (const span of data.spans) {
