@@ -6,7 +6,7 @@
     "build": "npm run tslint && rimraf dist && tsc -p ./ || echo 'ok'",
     "prepublishOnly": "npm run build"
   },
-  "main": "src/index.ts",
+  "main": "dist/index.ts",
   "types": "dist/index.d.ts",
   "engines": {
     "node": ">=12.8.0"
