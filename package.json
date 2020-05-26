@@ -1,12 +1,12 @@
 {
   "name": "share-tracer",
-  "version": "0.0.33",
+  "version": "0.0.34",
   "scripts": {
     "tslint": "tslint -c tslint.json 'src/**/*.ts' --fix",
     "build": "npm run tslint && rimraf dist && tsc -p ./ || echo 'ok'",
     "prepublishOnly": "npm run build"
   },
-  "main": "dist/index.ts",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "engines": {
     "node": ">=12.8.0"
