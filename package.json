@@ -1,6 +1,6 @@
 {
   "name": "share-tracer",
-  "version": "0.0.38",
+  "version": "0.0.39",
   "scripts": {
     "tslint": "tslint -c tslint.json 'src/**/*.ts' --fix",
     "build": "npm run tslint && rimraf dist && tsc -p ./ || echo 'ok'",
@@ -10,7 +10,7 @@
   "types": "dist/index.d.ts",
   "dependencies": {
     "lodash": "4.17.21",
-    "mongodb": "3.6.7",
+    "mongodb": "3.6.8",
     "pandora-hook": "1.10.6",
     "pandora-hub": "2.1.2",
     "pandora-metrics": "1.10.6"
